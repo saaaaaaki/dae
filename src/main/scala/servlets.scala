@@ -1,12 +1,17 @@
+import java.util.concurrent.ConcurrentHashMap
 import javax.servlet.http.{HttpServletResponse,HttpServletRequest,HttpServlet}
 import javax.servlet.annotation.WebServlet
 import java.util.UUID
 import scala.collection.concurrent.{ Map => ConcurrentMap }
+import scala.collection.concurrent.TrieMap
 
 case class Bookmark(title:String,url:String)
 
+
 @WebServlet(name = "bookmarkServlet",urlPatterns=Array("/"))
-class BookmarkServlet(bookmarks:ConcurrentMap[UUID,Bookmark])extends HttpServlet{
+class BookmarkServlet extends HttpServlet{
+  val bookmarks:ConcurrentMap[UUID,Bookmark] = new TrieMap[UUID,Bookmark]()
+
   override def doPost(req:HttpServletRequest,res:HttpServletResponse): Unit ={
     val out = res.getOutputStream()
     val title = req.getParameter("title")
