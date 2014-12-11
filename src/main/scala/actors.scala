@@ -14,6 +14,7 @@ class BookmarkStore extends Actor{
   var bookmarks = Map[UUID,Bookmark]()
   def receive = {
     case AddBookmark(title, url) =>
+      println("receive AddBookmark")
       val exists = bookmarks.values.exists {
         bm =>
           (bm.title == title && bm.url == url) || false
@@ -21,11 +22,14 @@ class BookmarkStore extends Actor{
       if (!exists) {
         val id = UUID.randomUUID
         bookmarks += (id -> Bookmark(id, title, url))
+        println(s"sender ! Some($id)")
         sender ! Some(id)
       } else {
+        println("sender ! None")
         sender ! None
       }
     case GetBookmark(uuid) =>
+      println("receive GetBookmark")
       sender ! bookmarks.get(uuid)
   }
 }
