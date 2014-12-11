@@ -11,7 +11,7 @@ sbt
 
 ##Store a bookmark
 ```
-curl -d title="title of bookmark" -d url="http://url.of.bookmark"
+curl localhost:8080 -d title="title of bookmark" -d url="http://url.of.bookmark"
 ```
 
 then,remenber uuid.
