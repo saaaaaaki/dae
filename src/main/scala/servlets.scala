@@ -31,9 +31,13 @@ class BookmarkServlet extends HttpServlet{
       case Success(uuid) =>
         println(s"Success($uuid)")
         writer.write(s"Successfully created bookmark with uuid = $uuid")
+        writer.close()
+        asyncCtx.complete()
       case Failure(error) =>
         println(s"Failure($error)")
         writer.write("Failure creating bookmark: " + error.getMessage)
+        writer.close()
+        asyncCtx.complete()
     }
   }
 
@@ -50,8 +54,12 @@ class BookmarkServlet extends HttpServlet{
     bookmarkFuture.mapTo[Option[Bookmark]].onComplete{
       case Success(bm) =>
         writer.write(bm.getOrElse("Not found").toString)
+        writer.close()
+        asyncCtx.complete()
       case Failure(error) =>
         writer.write("Could not retrieve bookmark: " + error.getMessage)
+        writer.close()
+        asyncCtx.complete()
     }
   }
   override def destroy(): Unit ={
